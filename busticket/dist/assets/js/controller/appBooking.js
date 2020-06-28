@@ -1,11 +1,11 @@
 $(function () {
 
-    // $.ajaxSetup({
-    //     beforeSend: function (xhr) {
-    //         var token = sessionStorage.getItem("token");
-    //         xhr.setRequestHeader("Authorization", "Bearer " + token);
-    //     }
-    // });
+    $.ajaxSetup({
+        beforeSend: function (xhr) {
+            var token = sessionStorage.getItem("token");
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
+        }
+    });
 
     function parseHash(newHash, oldHash) {
         crossroads.parse(newHash);
@@ -20,7 +20,20 @@ $(function () {
     });
 
     crossroads.ignoreState = true;
-    var bookingRoute = crossroads.addRoute('/booking', function () {
+
+    crossroads.addRoute('', function(){
+        if (!sessionStorage.token) {
+            window.location.href = "#login";
+            return;
+        }
+        window.location.href = "#home";
+    });
+
+    crossroads.addRoute('/booking', function () {
+        if (!sessionStorage.token) {
+            window.location.href = "#login";
+            return;
+        }
         $.ajax({
             type: "GET",
             url: 'assets/api/booking',
@@ -40,42 +53,11 @@ $(function () {
                 console.log(err);
             }
         })
+
+        $(".breadcrumb").empty();
+        $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#home'>Home</a></li>");
+        $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#booking'>Booking</a></li>");
     });
-    // crossroads.addRoute('/booking/flipstatus/{id}', function ($id) {
-    //     $.ajax({
-    //         type: "PUT",
-    //         url: 'assets/api/booking/flipstatus/' + $id,
-    //         dataType: "json",
-    //         success: function (data) {
-    //             $.ajax({
-    //                 type: "GET",
-    //                 url: 'assets/api/booking',
-    //                 dataType: "json",
-    //                 success: function (data) {
-    //                     $.get('assets/js/templates/booking.handlebars').then(function (src) {
-    //                         var template = Handlebars.compile(src);
-    //                         var html = template({ "bookings": data });
-    //                         $("#divcontent").empty();
-    //                         $("#divcontent").html(html);
-    //                     })
-    //                 },
-    //                 error: function (xhr, statusText, err) {
-    //                     console.log("error");
-    //                     console.log(xhr);
-    //                     console.log(statusText);
-    //                     console.log(err);
-    //                 }
-    //             })
-    //         },
-    //         error: function (xhr, statusText, err) {
-    //             // $('body').empty();
-    //             console.log("error");
-    //             console.log(xhr);
-    //             console.log(statusText);
-    //             console.log(err);
-    //         }
-    //     })
-    // });
 
     hasher.initialized.add(parseHash); //parse initial hash
     hasher.changed.add(parseHash); //parse hash changes
