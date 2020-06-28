@@ -150,6 +150,26 @@ class Database
 
    // =============START EDIT FUNCTIONS HERE==============//
 
+   function getUserIdByHash($password){
+      $sql = "SELECT id FROM users WHERE password = :password";        
+
+      $stmt = $this->db->prepare($sql);
+      $stmt->bindParam("password", $password);
+      $stmt->execute(); 
+      $row_count = $stmt->rowCount(); 
+
+      $user=null;
+      
+      if ($row_count) {
+         while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $user = new UsersV2();
+            $user->id = $row['id'];
+         }
+      }
+
+      return $user->id;
+   }
+
    function getAllBooking()
    {
       try {
@@ -228,28 +248,6 @@ class Database
    }
 
    
-   // function authenticateUser($email)
-   // {
-   //    $sql = "SELECT * from users
-   //               WHERE email = :email";
-
-   //    $stmt = $this->db->prepare($sql);
-   //    $stmt->bindParam("email", $email);
-   //    $stmt->execute();
-   //    $row_count = $stmt->rowCount();
-
-   //    $user = null;
-
-   //    if ($row_count) {
-   //       while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-   //          $user = new UsersV2();
-   //          $user->id= $row['id'];
-   //          $user->username = $row['username'];
-   //          $user->password = $row['password'];
-   //          $user->email = $row['email'];
-   //          $user->role = $row['role'];
-   //       }
-   //    }
    function authenticateUser($email) {
       $sql = "SELECT id,username, password as passwordhash, email, role
               FROM users
@@ -278,15 +276,15 @@ class Database
 
     
 
-   function updateCurrentToken($token,$email){
+   // function updateCurrentToken($token,$email){
 
-      $sql = "UPDATE users SET ownerlogin = :token WHERE email = :email";
-      $stmt = $this->db->prepare($sql);
-      $stmt->bindParam("token", $token);
-      $stmt->bindParam("email", $email);
-      $stmt->execute();
+   //    $sql = "UPDATE users SET ownerlogin = :token WHERE email = :email";
+   //    $stmt = $this->db->prepare($sql);
+   //    $stmt->bindParam("token", $token);
+   //    $stmt->bindParam("email", $email);
+   //    $stmt->execute();
 
-   }
+   // }
 
    function createBooking($ticket_id, $user_id){
 

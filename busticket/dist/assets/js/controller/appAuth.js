@@ -27,6 +27,7 @@ $(function () {
 
         if (sessionStorage.token) {
             window.location.href = "#home";
+            // console.log("success");
             return;
         }
 

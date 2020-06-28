@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card-box">
+            <h4 class="mt-0 header-title">List of Bus Ticket</h4>
+
+            <table id="datatable" class="table table-bordered dt-responsive nowrap">
+                <thead>
+                    <tr class>
+                        <th class="text-center" rowspan="2">Index</th>
+                        <th class="text-center" rowspan="2">Bus ID</th>
+                        <th class="text-center" colspan="2">Bus Destination</th>
+                        <th class="text-center" rowspan="2">Date</th>
+                        <th class="text-center" rowspan="2">Quantity</th>
+                        <th class="text-center" rowspan="2">Price (RM)</th>
+                        <th class="text-center" rowspan="2">Buy</th>
+                    </tr>
+                    <tr>
+                        <th>From</th>
+                        <th>To</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+                    {{#each ticketlist}}
+
+                    <tr>
+                        <td class="text-center">{{ id }}</td>
+                        <td class="text-center">{{ id }}</td>
+                        <td class="text-center">{{ destfrom }}</td>
+                        <td class="text-center">{{ destto }}</td>
+                        <td class="text-center">{{ date }}</td>
+                        <td class="text-center">{{ quantity }} / {{max}}</td>
+                        <td class="text-center">{{ price }}</td>
+                        <td class="text-center">
+                            <button onclick="makeBooking({{id}})"
+                                class="btn btn-icon waves-effect waves-light btn-success">
+                                <i class="mdi mdi-ticket-percent">
+                                </i>
+                            </button>
+                        </td>
+                        {{!-- <input id="ticketid" type="hidden" value={{id}}> --}}
+                    </tr>
+
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> <!-- end row -->
