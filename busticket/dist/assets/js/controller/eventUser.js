@@ -20,6 +20,7 @@ $(document.body).on("submit", "#userprofile", function (e) {
 
                 alert("Update successful");
 
+                location.reload();
                 window.location.href = "#profile";
 
             }
