@@ -394,7 +394,38 @@
                       ->withHeader('Content-type', 'application/json');     
    });
 
+   $app->get('/profile', function($request, $response){
+      
+      $user=getLoginFromTokenPayload($request, $response);
+      $user_email= $user->email;
+      $db = getDatabase();
+      $data = $db->getUserProfile($user_email);
+      $db->close();
+      return $data;
+   });
 
+   $app->get('/userlist', function($request, $response){
+      $db = getDatabase();
+      $data = $db->getAllUser();
+      $db->close();
+      return $data;
+   });
+
+   $app->put('/profile', function($request, $response){
+      $user=getLoginFromTokenPayload($request, $response);
+      $id= $user->email;
+      $json= json_decode($request->getBody());
+      $username = $json->username;
+      $db = getDatabase();
+      $dbs = $db->updateProfile($id, $username);
+      $db->close();
+      $data= Array(
+         "insertStatus"=>$dbs->status,
+         "errorMessage"=>$dbs->error
+      );
+      return $response->withJson($data, 200)
+      ->withHeader('Content-type', 'application/json');     
+   });
 
 
 // ==============EDIT END HERE===============

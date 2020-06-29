@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card-box">
+            <h4 class="mt-0 header-title">List of Users</h4>
+            <table id="datatable" class="table table-bordered dt-responsive nowrap">
+                <thead>
+                <tr>
+                    <th >User ID</th>
+                    <th >User Name</th>
+                    <th >Email</th>
+                    <th >Role</th>
+                </tr>
+
+                </thead>
+
+
+                <tbody>
+                {{#each userlist}}
+
+                    <tr>
+                        <td>{{ id }}</td>
+                        <td>{{ username }}</td>
+                        <td>{{ email }}</td>
+                        <td>{{ role }}</td>
+                        
+                    </tr>
+
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> <!-- end row -->

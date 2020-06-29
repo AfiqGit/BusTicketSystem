@@ -509,7 +509,93 @@ class Database
       }           
    }
 
+   function getUserProfile($email)
+   {
+      try
+      {
+         $sql = "SELECT * FROM users WHERE email = :email";
+         $stmt = $this->db->prepare($sql);
+         // $email= "test@gmail.com";
+         $stmt->bindParam("email", $email);
+         $stmt->execute();
+         $user = new UsersV2();
+         $row_count = $stmt->rowCount();
+         if ($row_count) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+               
+               $user->id = $row['id'];
+               $user->username = $row['username'];
+               $user->email = $row['email'];
+               $user->role = $row['role'];
+               $user->password = "";
 
+               // array_push($data, $user);
+            }
+            echo json_encode($user);
+            exit;
+            // return $user;
+         
+         }
+         else
+         {
+            echo json_encode($user);
+         }
+      }
+      catch (PDOException $e) 
+      {
+         die('ERROR: ' . $e->getMessage());
+      }
+   }
+
+   function getAllUser()
+   {
+      try {
+         $sql = "SELECT * FROM users";
+         $stmt = $this->db->prepare($sql);
+         $stmt->execute();
+         $row_count = $stmt->rowCount();
+         $data = array();
+         
+
+         if ($row_count) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+               $user = new UsersV2();
+               $user->id = $row['id'];
+               $user->username = $row['username'];
+               $user->email = $row['email'];
+               $user->role = $row['role'];
+
+               array_push($data, $user);
+            }
+
+            echo json_encode($data);
+            exit;
+         } else {
+            echo json_encode($data);
+            exit;
+         }
+      } catch (PDOException $e) {
+         die('ERROR: ' . $e->getMessage());
+      }
+   }
+
+   function updateProfile($id,$username)
+   {
+      try {
+         $sql = "UPDATE users SET username = :username WHERE email = :email";
+         $stmt = $this->db->prepare($sql);
+         $stmt->bindParam("email", $id);
+         $stmt->bindParam("username", $username);
+         $stmt->execute();
+
+         $dbs= new DbStatus();
+         $dbs->status= true;
+         $dbs->error="none";
+         return $dbs;
+      } catch (PDOException $e) {
+         die('ERROR: ' . $e->getMessage());
+      }
+   }
 
 
 
