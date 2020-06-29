@@ -9,6 +9,7 @@ function loadTable() {
                 var html = template({
                     "ticketlist": data
                 });
+                $("#loginname").html(data.username);
                 $("#divcontent").empty();
                 $("#divcontent").html(html);
 

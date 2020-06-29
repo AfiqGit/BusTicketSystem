@@ -43,6 +43,7 @@ $(function () {
                 $.get('assets/js/templates/booking.handlebars').then(function (src) {
                     var template = Handlebars.compile(src);
                     var html = template({ "bookings": data });
+                    $("#loginname").html(data.username);
                     $("#divcontent").empty();
                     $("#divcontent").html(html);
                 })

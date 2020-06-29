@@ -13,9 +13,21 @@ $(function () {
 
     var routeuserprofile = crossroads.addRoute('/profile', function () {
         if (!sessionStorage.token) {
+        
+            $("#loginname").html("umar");
+            sessionStorage.removeItem("token");
             window.location.href = "#login";
             return;
+
+           
         }
+        //get token from sessionStorage
+        //var token = sessionStorage.getItem("token");
+
+		//decode jwt token using jwt-decode
+		//var decoded = jwt_decode(token);
+//$("#loginname").html(decoded.login);	
+        
         $.ajax({
             type: "GET",
             url: 'assets/api/profile',
@@ -26,6 +38,7 @@ $(function () {
                     var template = Handlebars.compile(src);
                     var html = template(data);
 
+                    $("#loginname").html(data.username);
                     $("#divcontent").empty();
                     $("#divcontent").html(html);
 
@@ -130,6 +143,7 @@ $(function () {
                     var template = Handlebars.compile(src);
                     var html = template({ "userlist": data });
                     console.log(data);
+                    $("#loginname").html(data.username);
                     $("#divcontent").empty();
                     $("#divcontent").html(html);
 
