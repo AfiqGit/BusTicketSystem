@@ -7,7 +7,7 @@ class Booking
    var $status;
 }
 
-class UsersV2
+Class UsersV2
 {
    var $id;
    var $username;
@@ -16,8 +16,7 @@ class UsersV2
    var $role;
 }
 
-class Ticket
-{
+class Ticket {
 
    var $id;
    var $destfrom;
@@ -26,6 +25,7 @@ class Ticket
    var $quantity;
    var $max;
    var $price;
+
 }
 
 class DbStatus
@@ -150,19 +150,18 @@ class Database
 
    // =============START EDIT FUNCTIONS HERE==============//
 
-   function getUserIdByHash($password)
-   {
-      $sql = "SELECT id FROM users WHERE password = :password";
+   function getUserIdByHash($password){
+      $sql = "SELECT id FROM users WHERE password = :password";        
 
       $stmt = $this->db->prepare($sql);
       $stmt->bindParam("password", $password);
-      $stmt->execute();
-      $row_count = $stmt->rowCount();
+      $stmt->execute(); 
+      $row_count = $stmt->rowCount(); 
 
-      $user = null;
-
+      $user=null;
+      
       if ($row_count) {
-         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+         while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $user = new UsersV2();
             $user->id = $row['id'];
          }
@@ -174,45 +173,20 @@ class Database
    function getAllBooking()
    {
       try {
-         $sql = "
-            SELECT 
-               bookings.*,
-               users.username,
-               users.email,
-               tickets.destfrom,
-               tickets.destto,
-               tickets.date,
-               tickets.quantity,
-               tickets.max,
-               tickets.price
-            FROM
-               bookings
-                  LEFT JOIN
-               users ON bookings.userid = users.id
-                  LEFT JOIN
-               tickets ON tickets.id = bookings.ticketid";
-
+         $sql = "SELECT * FROM bookings";
          $stmt = $this->db->prepare($sql);
          $stmt->execute();
          $row_count = $stmt->rowCount();
          $data = array();
          if ($row_count) {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-               $object = new stdClass();
-               $object->id = $row['id'];
-               $object->ticketid = $row['ticketid'];
-               $object->userid = $row['userid'];
-               $object->status = $row['status'];
-               $object->username = $row['username'];
-               $object->email = $row['email'];
-               $object->destfrom = $row['destfrom'];
-               $object->destto = $row['destto'];
-               $object->date = $row['date'];
-               $object->quantity = $row['quantity'];
-               $object->max = $row['max'];
-               $object->price = $row['price'];
+               $booking = new Booking();
+               $booking->id = $row['id'];
+               $booking->ticketid = $row['ticketid'];
+               $booking->userid = $row['userid'];
+               $booking->status = $row['status'];
 
-               array_push($data, $object);
+               array_push($data, $booking);
             }
 
             echo json_encode($data);
@@ -233,46 +207,25 @@ class Database
          $stmt = $this->db->prepare($sql);
          $stmt->bindParam("id", $id);
          $stmt->execute();
-
-         $sql = "
-            SELECT 
-               bookings.*,
-               users.username,
-               users.email,
-               tickets.destfrom,
-               tickets.destto,
-               tickets.date,
-               tickets.quantity,
-               tickets.max,
-               tickets.price
-            FROM
-               bookings
-                  LEFT JOIN
-               users ON bookings.userid = users.id
-                  LEFT JOIN
-               tickets ON tickets.id = bookings.ticketid";
-
+         $sql = "SELECT * FROM bookings";
          $stmt = $this->db->prepare($sql);
          $stmt->execute();
+
+         // $dbs = new DbStatus();
+         // $dbs->status = true;
+         // $dbs->error = "none";
+         // return $dbs;
          $row_count = $stmt->rowCount();
          $data = array();
          if ($row_count) {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-               $object = new stdClass();
-               $object->id = $row['id'];
-               $object->ticketid = $row['ticketid'];
-               $object->userid = $row['userid'];
-               $object->status = $row['status'];
-               $object->username = $row['username'];
-               $object->email = $row['email'];
-               $object->destfrom = $row['destfrom'];
-               $object->destto = $row['destto'];
-               $object->date = $row['date'];
-               $object->quantity = $row['quantity'];
-               $object->max = $row['max'];
-               $object->price = $row['price'];
+               $booking = new Booking();
+               $booking->id = $row['id'];
+               $booking->ticketid = $row['ticketid'];
+               $booking->userid = $row['userid'];
+               $booking->status = $row['status'];
 
-               array_push($data, $object);
+               array_push($data, $booking);
             }
 
             echo json_encode($data);
@@ -281,6 +234,7 @@ class Database
             echo json_encode($data);
             exit;
          }
+
       } catch (PDOException $e) {
          // die('ERROR: ' . $e->getMessage());
          $errorMessage = $e->getMessage();
@@ -293,79 +247,21 @@ class Database
       }
    }
 
-   function getUserBooking($email)
-   {
-      try {
-         $sql = "
-            SELECT 
-               bookings.*,
-               users.username,
-               users.email,
-               tickets.destfrom,
-               tickets.destto,
-               tickets.date,
-               tickets.quantity,
-               tickets.max,
-               tickets.price
-            FROM
-               bookings
-                  LEFT JOIN
-               users ON bookings.userid = users.id
-                  LEFT JOIN
-               tickets ON tickets.id = bookings.ticketid
-            WHERE users.email = :email";
-
-         $stmt = $this->db->prepare($sql);
-         $stmt->bindParam("email", $email);
-         $stmt->execute();
-         $row_count = $stmt->rowCount();
-         $data = array();
-         if ($row_count) {
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-               $object = new stdClass();
-               $object->id = $row['id'];
-               $object->ticketid = $row['ticketid'];
-               $object->userid = $row['userid'];
-               $object->status = $row['status'];
-               $object->username = $row['username'];
-               $object->email = $row['email'];
-               $object->destfrom = $row['destfrom'];
-               $object->destto = $row['destto'];
-               $object->date = $row['date'];
-               $object->quantity = $row['quantity'];
-               $object->max = $row['max'];
-               $object->price = $row['price'];
-
-               array_push($data, $object);
-            }
-
-            echo json_encode($data);
-            exit;
-         } else {
-            echo json_encode($data);
-            exit;
-         }
-      } catch (PDOException $e) {
-         die('ERROR: ' . $e->getMessage());
-      }
-   }
-
-
-   function authenticateUser($email)
-   {
+   
+   function authenticateUser($email) {
       $sql = "SELECT id,username, password as passwordhash, email, role
               FROM users
-              WHERE email = :email";
+              WHERE email = :email";        
 
       $stmt = $this->db->prepare($sql);
       $stmt->bindParam("email", $email);
-      $stmt->execute();
-      $row_count = $stmt->rowCount();
+      $stmt->execute(); 
+      $row_count = $stmt->rowCount(); 
 
       $user = null;
 
       if ($row_count) {
-         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+         while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $user = new UsersV2();
             $user->id = $row['id'];
             $user->username = $row['username'];
@@ -378,7 +274,7 @@ class Database
       return $user;
    }
 
-
+    
 
    // function updateCurrentToken($token,$email){
 
@@ -390,10 +286,9 @@ class Database
 
    // }
 
-   function createBooking($ticket_id, $user_id)
-   {
+   function createBooking($ticket_id, $user_id){
 
-
+      
       $sql = "SELECT * from tickets
                  WHERE id = :ticketid";
 
@@ -405,22 +300,23 @@ class Database
       if ($row_count) {
          while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $ticket = new Ticket();
-            $ticket->quantity = $row['quantity'];
+            $ticket->quantity= $row['quantity'];
             $ticket->max = $row['max'];
+
          }
 
-         $quantity = $ticket->quantity;
-         $max = $ticket->max;
-         if ($quantity < $max) {
+         $quantity=$ticket->quantity;
+         $max=$ticket->max;
+         if($quantity < $max){
 
             $sql = "INSERT INTO bookings (ticketid, userid)
-            VALUES (:ticketid, :userid)";
+            VALUES (:ticketid, :userid)";      
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam("ticketid", $ticket_id);
             $stmt->bindParam("userid", $user_id);
             $stmt->execute();
 
-            $new_quantity = $quantity + 1;
+            $new_quantity=$quantity + 1;
 
             $sql = "UPDATE tickets SET quantity = :quantity WHERE id = :ticketid";
             $stmt = $this->db->prepare($sql);
@@ -428,12 +324,17 @@ class Database
             $stmt->bindParam("ticketid", $ticket_id);
             $stmt->execute();
 
-            $status = "Success";
-         } else {
-            $status = "Full";
+            $status="Success";
+
          }
+         else{
+            $status="Full";
+         }
+         
+
       }
       return $status;
+
    }
 
    function getAllTicket()
@@ -449,11 +350,11 @@ class Database
 
          if ($row_count) {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
+               
                $ticket = new Ticket();
-
-               $ticket->index = $index;
-               $index += 1;
+               
+               $ticket->index =$index;
+               $index +=1;
                $ticket->id = $row['id'];
                $ticket->destfrom = $row['destfrom'];
                $ticket->destto = $row['destto'];
@@ -488,7 +389,7 @@ class Database
 
          if ($row_count) {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
+               
                $ticket = new Ticket();
                $ticket->id = $row['id'];
                $ticket->destfrom = $row['destfrom'];
@@ -512,20 +413,19 @@ class Database
       }
    }
 
-   function insertTicket($destfrom, $destto, $date, $max, $price)
-   {
+   function insertTicket($destfrom, $destto, $date, $max, $price) {
 
       try {
-
+         
          $sql = "INSERT INTO tickets (destfrom, destto, date, max, price) 
                  VALUES (:destfrom, :destto, :date, :max, :price)";
 
-         $stmt = $this->db->prepare($sql);
+         $stmt = $this->db->prepare($sql);  
          $stmt->bindParam("destfrom", $destfrom);
-         $stmt->bindParam("destto", $destto);
-         $stmt->bindParam("date", $date);
-         $stmt->bindParam("max", $max);
-         $stmt->bindParam("price", $price);
+         $stmt->bindParam("destto"  , $destto);
+         $stmt->bindParam("date"    , $date);
+         $stmt->bindParam("max"     , $max);
+         $stmt->bindParam("price"   , $price);
          $stmt->execute();
 
          $dbs = new DbStatus();
@@ -534,7 +434,8 @@ class Database
          $dbs->lastinsertid = $this->db->lastInsertId();
 
          return $dbs;
-      } catch (PDOException $e) {
+      }
+      catch(PDOException $e) {
          $errorMessage = $e->getMessage();
 
          $dbs = new DbStatus();
@@ -542,11 +443,10 @@ class Database
          $dbs->error = $errorMessage;
 
          return $dbs;
-      }
+      }          
    }
 
-   function updateTicket($id, $destfrom, $destto, $date, $max, $price)
-   {
+   function updateTicket($id, $destfrom, $destto, $date, $max, $price) {
 
       $sql = "UPDATE tickets
                SET destfrom = :destfrom,
@@ -557,7 +457,7 @@ class Database
                WHERE id = :id";
 
       try {
-         $stmt = $this->db->prepare($sql);
+         $stmt = $this->db->prepare($sql);  
          $stmt->bindParam("id", $id);
          $stmt->bindParam("destfrom", $destfrom);
          $stmt->bindParam("destto", $destto);
@@ -571,7 +471,8 @@ class Database
          $dbs->error = "none";
 
          return $dbs;
-      } catch (PDOException $e) {
+      }
+      catch(PDOException $e) {
          $errorMessage = $e->getMessage();
 
          $dbs = new DbStatus();
@@ -579,11 +480,10 @@ class Database
          $dbs->error = $errorMessage;
 
          return $dbs;
-      }
+      } 
    }
 
-   function deleteTicket($id)
-   {
+   function deleteTicket($id) {
 
       $dbstatus = new DbStatus();
 
@@ -592,25 +492,27 @@ class Database
               WHERE id = :id";
 
       try {
-         $stmt = $this->db->prepare($sql);
+         $stmt = $this->db->prepare($sql); 
          $stmt->bindParam("id", $id);
          $stmt->execute();
 
          $dbstatus->status = true;
          $dbstatus->error = "none";
          return $dbstatus;
-      } catch (PDOException $e) {
+      }
+      catch(PDOException $e) {
          $errorMessage = $e->getMessage();
 
          $dbstatus->status = false;
          $dbstatus->error = $errorMessage;
          return $dbstatus;
-      }
+      }           
    }
 
    function getUserProfile($email)
    {
-      try {
+      try
+      {
          $sql = "SELECT * FROM users WHERE email = :email";
          $stmt = $this->db->prepare($sql);
          // $email= "test@gmail.com";
@@ -620,7 +522,7 @@ class Database
          $row_count = $stmt->rowCount();
          if ($row_count) {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
+               
                $user->id = $row['id'];
                $user->username = $row['username'];
                $user->email = $row['email'];
@@ -632,11 +534,15 @@ class Database
             echo json_encode($user);
             exit;
             // return $user;
-
-         } else {
+         
+         }
+         else
+         {
             echo json_encode($user);
          }
-      } catch (PDOException $e) {
+      }
+      catch (PDOException $e) 
+      {
          die('ERROR: ' . $e->getMessage());
       }
    }
@@ -649,7 +555,7 @@ class Database
          $stmt->execute();
          $row_count = $stmt->rowCount();
          $data = array();
-
+         
 
          if ($row_count) {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -673,7 +579,7 @@ class Database
       }
    }
 
-   function updateProfile($id, $username)
+   function updateProfile($id,$username)
    {
       try {
          $sql = "UPDATE users SET username = :username WHERE email = :email";
@@ -682,9 +588,9 @@ class Database
          $stmt->bindParam("username", $username);
          $stmt->execute();
 
-         $dbs = new DbStatus();
-         $dbs->status = true;
-         $dbs->error = "none";
+         $dbs= new DbStatus();
+         $dbs->status= true;
+         $dbs->error="none";
          return $dbs;
       } catch (PDOException $e) {
          die('ERROR: ' . $e->getMessage());
@@ -704,8 +610,7 @@ class Database
 
    // =============EDIT FUNCTION END HERE==============//
    //hashpassword
-   function hashPassword($password)
-   {
+   function hashPassword($password) { 
 
       $cost = 10;
 
@@ -716,7 +621,7 @@ class Database
       $passwordhash =  password_hash($password, PASSWORD_BCRYPT, $options);
       return $passwordhash;
    }
-   function insertUser($email, $clearpassword, $username)
+   function insertUser($email, $clearpassword,$username)
    {
 
       //hash the password using one way md5 brcrypt hashing

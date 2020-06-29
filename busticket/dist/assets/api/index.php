@@ -198,61 +198,26 @@
 
 // ==============EDIT START HERE===============
 
-   $app->get('/booking', function($request, $response, $args){
-      $user = getLoginFromTokenPayload($request, $response);
-      if ($user->role == "admin") {
-         $db = getDatabase();
-         $data = $db->getAllBooking();
-         $db->close();
-         // return $data;
-         return $response->withJson($data, 200)
-                         ->withHeader('Content-type', 'application/json');
-      } else {
-
-         $msj = Array(
-            "message" => "User have no permission to access this API."
-         ); 
-         return $response->withJson($msj, 403)
-                         ->withHeader('Content-type', 'application/json');
-      }
+   $app->get('/booking', function(){
+      $db = getDatabase();
+      $data = $db->getAllBooking();
+      $db->close();
+      return $data;
    });
 
    $app->put('/booking/flipstatus/[{id}]', function($request, $response, $args){
       $id = $args['id'];
-      $user = getLoginFromTokenPayload($request, $response);
-      if ($user->role == "admin") {
-         $db = getDatabase();
-         $data = $db->updateBooking($id);
-         $db->close();
-         return $response->withJson($data, 200)
-                         ->withHeader('Content-type', 'application/json');
-      } else {
+      $db = getDatabase();
+      $dbs = $db->updateBooking($id);
+      $db->close();
+      // $data = Array(
+      //    "updateStatus" => $dbs->status,
+      //    "errorMessage" => $dbs->error
+      // );
 
-         $msj = Array(
-            "message" => "User have no permission to access this API."
-         ); 
-         return $response->withJson($msj, 403)
-                         ->withHeader('Content-type', 'application/json');
-      }
-   });
-
-   $app->get('/mybooking', function($request, $response, $args){
-      $user = getLoginFromTokenPayload($request, $response);
-      if ($user->role == "member") {
-         $db = getDatabase();
-         $data = $db->getUserBooking($user->email);
-         $db->close();
-         // return $data;
-         return $response->withJson($data, 200)
-                         ->withHeader('Content-type', 'application/json');
-      } else {
-
-         $msj = Array(
-            "message" => "User have no permission to access this API."
-         ); 
-         return $response->withJson($msj, 403)
-                         ->withHeader('Content-type', 'application/json');
-      }
+      // return $response->withJson($data, 200)
+      //                 ->withHeader('Content-type', 'application/json');
+      return $dbs;
    });
 
    /**
@@ -297,7 +262,7 @@
                "iss" => "mycontacts.net", //token issuer
                "iat" => $jwtIAT, //issued at time
                "exp" => $jwtExp, //expire
-               "role" => $data->role,
+               "role" => "member",
                "email" => $data->email,
                "username" => $data->username,
                "password"=> $data->passwordhash
