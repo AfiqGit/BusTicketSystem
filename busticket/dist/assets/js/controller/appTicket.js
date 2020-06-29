@@ -20,6 +20,7 @@ $(function () {
                     var template = Handlebars.compile(src);
                     var html = template({ "ticketlist": data });
 
+                    $("#loginname").html(data.username);
                     $("#divcontent").empty();
                     $("#divcontent").html(html);
 
@@ -51,6 +52,7 @@ $(function () {
 
             var template = Handlebars.compile(src);
 
+            //$("#loginname").html(data.username);
             $("#divcontent").empty();
             $("#divcontent").html(template);
 

@@ -41,7 +41,7 @@ $(document.body).on("submit", "#createticketForm", function (e) {
                 var responseText = JSON.parse(xhr.responseText);
                 bootbox.alert("Error 401 - Unauthorized: " + responseText.message);
 
-                $("#loginname").html("noname");
+                $("#loginname").html(data.username);
                 sessionStorage.removeItem("token");
                 sessionStorage.removeItem("login");
                 window.location.href = "#login";

@@ -65,6 +65,7 @@ $(document.body).on("submit", "#loginform", function (e) {
 
                 sessionStorage.setItem("token", data.token);
                 //redirect to the /#home
+                location.reload();
                 window.location.href = "#profile";
 
             } else {

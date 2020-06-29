@@ -26,14 +26,16 @@ $(function () {
     var routelogin = crossroads.addRoute('/login', function () {
 
         if (sessionStorage.token) {
-            window.location.href = "#home";
+          
+            window.location.href = "#profile";
             // console.log("success");
             return;
         }
-
+       
         $.get('assets/js/templates/login.handlebars').then(function (src) {
             var createLoginTemplate = Handlebars.compile(src);
 
+            
             $("#wrap").empty();
             $("#topnav").empty();
             $("#divcontent").empty();
