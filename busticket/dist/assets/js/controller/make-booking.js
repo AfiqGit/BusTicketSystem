@@ -64,9 +64,9 @@ function makeBooking(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                headers: {
-                    "Authorization": "Bearer " + token,
-                },
+                // headers: {
+                //     "Authorization": "Bearer " + token,
+                // },
                 url: 'assets/api/createBooking',
                 dataType: "json",
                 data: JSON.stringify(obj),
