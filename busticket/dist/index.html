@@ -59,7 +59,7 @@
                             </div>
 
                             <div class="dropdown-divider"></div>
-                            
+
                             <!-- item-->
                             <a href="#logout" class="dropdown-item notify-item">
                                 <i class="fe-log-out"></i>
@@ -68,7 +68,7 @@
 
                         </div>
                     </li>
-                    
+
 
                 </ul>
 
@@ -100,26 +100,43 @@
                             <a href="#profile"><i class="mdi mdi-view-dashboard"></i>Profile</a>
                         </li>
 
-                        <li class="has-submenu" id="userlist">
-                            <a href="#userlist"><i class="ti-user"></i></i>User List</a>
-                        </li>
+                        <li class="has-submenu">
+                            <a href="#"> <i class="fas fa-user-cog"></i>Admin <div class="arrow-down"></div></a>
+                            <ul class="submenu megamenu">
+                                <li>
+                                    <ul>
+                                        <li class="has-submenu" id="userlist">
+                                            <a href="#userlist"><i class="ti-user"></i></i>&nbsp;User List</a>
+                                        </li>
 
-                        <li class="has-submenu" id="ticket">
-                            <a href="#ticket"><i class="ti-truck"></i>Bus Ticket</a>
-                        </li>
+                                        <li class="has-submenu" id="ticket">
+                                            <a href="#ticket"><i class="ti-truck"></i>&nbsp;Manage Ticket</a>
+                                        </li>
 
-                        <li class="has-submenu" id="booking">
-                            <a href="#booking"><i class="ti-bookmark-alt"></i>Booking</a>
+                                </li>
+                                <li class="has-submenu" id="record">
+                                    <a href="#record"><i class="fab fa-audible"></i>&nbsp;All Record</a>
+                                </li>
+                            </ul>
                         </li>
+                    </ul>
+                    </li>
 
-                        </li>
-                        <li class="has-submenu" id="record">
-                            <a href="#record"><i class="fab fa-audible"></i>Record</a>
-                        </li>
-
-                        <li class="has-submenu" id="record">
-                            <a href="#myrecord"><i class="fab fa-audible"></i>My Record</a>
-                        </li>
+                    <li class="has-submenu">
+                        <a href="#"> <i class="fas fa-user-alt"></i>Member <div class="arrow-down"></div></a>
+                        <ul class="submenu megamenu">
+                            <li>
+                                <ul>
+                                    <li class="has-submenu" id="booking">
+                                        <a href="#booking"><i class="ti-bookmark-alt"></i>&nbsp;Booking</a>
+                                    </li>
+                                    <li class="has-submenu" id="record">
+                                        <a href="#myrecord"><i class="fab fa-audible"></i>&nbsp;My Record</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
 
                     </ul>
                     <!-- End navigation menu -->
@@ -245,3 +262,47 @@
 </body>
 
 </html>
+
+<script>
+    $(document).ready(function () {
+        // $.ajaxSetup({
+        //     beforeSend: function (xhr) {
+        //         var token = sessionStorage.getItem("token");
+        //         xhr.setRequestHeader("Authorization", "Bearer " + token);
+        //     }
+        // });
+        var token = sessionStorage.getItem("token");
+        $.ajax({
+            type: "GET",
+            url: 'assets/api/profile',
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            dataType: "json",
+            success: function (data) {
+                $("#loginname").html(data.username);
+            },
+            error: function (xhr, statusText, err) {
+                console.log(xhr);
+                console.log(statusText);
+                console.log(err);
+                if (xhr.status == 401) {
+                    //response text from the server if there is any
+                    var responseText = JSON.parse(xhr.responseText);
+                    bootbox.alert("Error 401 - Unauthorized: " + responseText.message);
+
+                    $("#loginname").html("noname");
+                    sessionStorage.removeItem("token");
+                    sessionStorage.removeItem("login");
+                    window.location.href = "#login";
+                    return;
+                }
+
+                if (xhr.status == 404) {
+                    bootbox.alert("Error 404 - API resource not found at the server");
+                }
+
+            }
+        });
+    });
+</script>

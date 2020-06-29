@@ -63,7 +63,7 @@ $(function () {
 
         $(".breadcrumb").empty();
         $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#profile'>Home</a></li>");
-        $(".breadcrumb").append("<li class='breadcrumb-item'>Record</li>");
+        $(".breadcrumb").append("<li class='breadcrumb-item active'>Record</li>");
     });
 
     crossroads.addRoute('/myrecord', function () {
@@ -99,7 +99,7 @@ $(function () {
 
         $(".breadcrumb").empty();
         $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#profile'>Home</a></li>");
-        $(".breadcrumb").append("<li class='breadcrumb-item'>My Record</li>");
+        $(".breadcrumb").append("<li class='breadcrumb-item active'>My Record</li>");
     });
 
     hasher.initialized.add(parseHash); //parse initial hash

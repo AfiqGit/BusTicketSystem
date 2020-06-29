@@ -157,26 +157,15 @@ $(function () {
                 })
             },
             error: function (xhr, statusText, err) {
-                //console.log("hello error");
-                console.log(xhr);
-                console.log(statusText);
-                console.log(err);
-                if (xhr.status == 401) {
-                    //response text from the server if there is any
-                    var responseText = JSON.parse(xhr.responseText);
-                    bootbox.alert("Error 401 - Unauthorized: " + responseText.message);
-
-                    $("#loginname").html("noname");
-                    sessionStorage.removeItem("token");
-                    sessionStorage.removeItem("login");
-                    window.location.href = "#login";
-                    return;
+                if (xhr.status == 403) {
+                    $("#divcontent").empty();
+                    $("#divcontent").html("<div class='row'><div class='col-12'><div class='card-box'><h4 class='mt-0 header-title'>You have no permission to view this page.</h4></div></div></div>");
+                } else {
+                    console.log("error");
+                    console.log(xhr);
+                    console.log(statusText);
+                    console.log(err);
                 }
-
-                if (xhr.status == 404) {
-                    bootbox.alert("Error 404 - API resource not found at the server");
-                }
-
             }
         });
 

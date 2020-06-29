@@ -1,7 +1,7 @@
 function loadTable() {
     $.ajax({
         type: "GET",
-        url: 'assets/api/ticket',
+        url: 'assets/api/ticketmember',
         dataType: "json",
         success: function (data) {
             $.get('assets/js/templates/make-booking.handlebars').then(function (src) {
@@ -24,11 +24,15 @@ function loadTable() {
 
         },
         error: function (xhr, statusText, err) {
-            $('body').empty();
-            console.log("error");
-            console.log(xhr);
-            console.log(statusText);
-            console.log(err);
+            if (xhr.status == 403) {
+                $("#divcontent").empty();
+                $("#divcontent").html("<div class='row'><div class='col-12'><div class='card-box'><h4 class='mt-0 header-title'>You have no permission to view this page.</h4></div></div></div>");
+            } else {
+                console.log("error");
+                console.log(xhr);
+                console.log(statusText);
+                console.log(err);
+            }
         }
     })
 }
