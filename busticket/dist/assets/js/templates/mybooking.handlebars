@@ -9,9 +9,6 @@
                             <thead>
                                 <tr>
                                     <th rowspan="2">ID</th>
-                                    <th rowspan="2">User ID</th>
-                                    <th rowspan="2">Username</th>
-                                    <th rowspan="2">Email</th>
                                     <th rowspan="2">Ticket ID</th>
                                     <th colspan="2">Bus Destination</th>
                                     <th rowspan="2">Date</th>
@@ -28,9 +25,6 @@
                                 {{#each bookings}}
                                 <tr>
                                     <td>{{id}}</td>
-                                    <td>{{userid}}</td>
-                                    <td>{{username}}</td>
-                                    <td>{{email}}</td>
                                     <td>{{ticketid}}</td>
                                     <td>{{destfrom}}</td>
                                     <td>{{destto}}</td>
@@ -38,7 +32,7 @@
                                     <td>{{quantity}} / {{max}}</td>
                                     <td>{{price}}</td>
                                     <td>
-                                        <a href="javascript:;" class="updatestatus">{{{displaystatus status}}}</a>
+                                        <a class="updatestatus">{{{displaystatus status}}}</a>
                                     </td>
                                 </tr>
                                 {{/each}}
@@ -50,31 +44,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(function () {
-        $("#tblbooking").on("click", ".updatestatus", function () {
-            var id = $(this).parent().parent().children().eq(0).html();
-            $.ajax({
-                type: "PUT",
-                url: 'assets/api/booking/flipstatus/' + id,
-                dataType: "json",
-                success: function (data) {
-                    $.get('assets/js/templates/booking.handlebars').then(function (src) {
-                        var template = Handlebars.compile(src);
-                        var html = template({ "bookings": data });
-                        $("#divcontent").empty();
-                        $("#divcontent").html(html);
-                    })
-                },
-                error: function (xhr, statusText, err) {
-                    // $('body').empty();
-                    console.log("error");
-                    console.log(xhr);
-                    console.log(statusText);
-                    console.log(err);
-                }
-            })
-        });
-    });
-</script>
