@@ -29,11 +29,12 @@ $(function () {
         window.location.href = "#home";
     });
 
-    crossroads.addRoute('/booking', function () {
+    crossroads.addRoute('/record', function () {
         if (!sessionStorage.token) {
             window.location.href = "#login";
             return;
         }
+        
         $.ajax({
             type: "GET",
             url: 'assets/api/booking',
@@ -55,8 +56,8 @@ $(function () {
         })
 
         $(".breadcrumb").empty();
-        $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#home'>Home</a></li>");
-        $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#booking'>Booking</a></li>");
+        $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#profile'>Home</a></li>");
+        $(".breadcrumb").append("<li class='breadcrumb-item'>Record</li>");
     });
 
     hasher.initialized.add(parseHash); //parse initial hash

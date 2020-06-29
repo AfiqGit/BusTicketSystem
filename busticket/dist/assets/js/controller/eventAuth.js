@@ -65,7 +65,7 @@ $(document.body).on("submit", "#loginform", function (e) {
 
                 sessionStorage.setItem("token", data.token);
                 //redirect to the /#home
-                window.location.href = "#make-booking";
+                window.location.href = "#profile";
 
             } else {
 

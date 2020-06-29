@@ -9,11 +9,15 @@ function loadTable() {
                 var html = template({
                     "ticketlist": data
                 });
-                // $('body').empty();
-                // // $('body').html(html);
-                // $('body').append(html);
                 $("#divcontent").empty();
                 $("#divcontent").html(html);
+
+                $(".page-title").empty();
+                $(".page-title").append("Booking Bus Ticket");
+
+                $(".breadcrumb").empty();
+                $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#profile'>Home</a></li>");
+                $(".breadcrumb").append("<li class='breadcrumb-item active'>Book</li>");
 
             })
 
@@ -35,8 +39,11 @@ $(function () {
     }
     crossroads.ignoreState = true;
 
-    var ticketRoute = crossroads.addRoute('/make-booking', function () {
-
+    var ticketRoute = crossroads.addRoute('/booking', function () {
+        if (!sessionStorage.token) {
+            window.location.href = "#login";
+            return;
+        }
         loadTable();
 
 

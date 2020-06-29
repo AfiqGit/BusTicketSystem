@@ -6,7 +6,10 @@ $(function () {
     crossroads.ignoreState = true;
 
     var viewticketRoute = crossroads.addRoute('/ticket', function () {
-
+        if (!sessionStorage.token) {
+            window.location.href = "#login";
+            return;
+        }
         $.ajax({
             type: "GET",
             url: 'assets/api/ticket',
@@ -24,7 +27,7 @@ $(function () {
                     $(".page-title").append("Bus Ticket");
 
                     $(".breadcrumb").empty();
-                    $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#home'>Home</a></li>");
+                    $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#profile'>Home</a></li>");
                     $(".breadcrumb").append("<li class='breadcrumb-item active'>Ticket</li>");
 
                 })
@@ -40,7 +43,10 @@ $(function () {
     });
 
     var createTicketRoute = crossroads.addRoute('/ticket/add', function () {
-
+        if (!sessionStorage.token) {
+            window.location.href = "#login";
+            return;
+        }
         $.get('assets/js/templates/ticket-create.handlebars').then(function (src) {
 
             var template = Handlebars.compile(src);
@@ -52,7 +58,7 @@ $(function () {
             $(".page-title").append("Create New Bus Ticket");
 
             $(".breadcrumb").empty();
-            $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#home'>Home</a></li>");
+            $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#profile'>Home</a></li>");
             $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#ticket'>Ticket</a></li>");
             $(".breadcrumb").append("<li class='breadcrumb-item active'>Create New Ticket</li>");
         })
@@ -60,7 +66,10 @@ $(function () {
     });
 
     var editTicketRoute = crossroads.addRoute('/ticket/edit/{id}', function (id) {
-
+        if (!sessionStorage.token) {
+            window.location.href = "#login";
+            return;
+        }
         $.ajax({
             type: "GET",
             url: 'assets/api/ticket/' + id,
@@ -78,7 +87,7 @@ $(function () {
                     $(".page-title").append("Edit Bus Ticket");
 
                     $(".breadcrumb").empty();
-                    $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#home'>Home</a></li>");
+                    $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#profile'>Home</a></li>");
                     $(".breadcrumb").append("<li class='breadcrumb-item'><a href='#ticket'>Ticket</a></li>");
                     $(".breadcrumb").append("<li class='breadcrumb-item active'>Edit Ticket</li>");
 

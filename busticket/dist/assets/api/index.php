@@ -191,8 +191,7 @@
             '/auth',
             '/hello',
             '/calc',
-            '/registration',
-            '/ticket'
+            '/registration'
          ], 
         'authenticator' => $authenticator
    ]));
